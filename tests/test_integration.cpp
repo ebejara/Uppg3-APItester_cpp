@@ -16,7 +16,7 @@ TEST(FakeStoreApiTest, GetProductsReturns200) {
 
     spdlog::info("API test completed with status: {}", r.status_code);
 }
-
+//Test
 int main(int argc, char **argv) {
     spdlog::set_level(spdlog::level::info);  // Sätt loggnivå
     ::testing::InitGoogleTest(&argc, argv);
