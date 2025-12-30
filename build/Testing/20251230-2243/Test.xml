@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20251230-2243-Experimental"
+	Name="(empty)"
+	Generator="ctest-4.2.0"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Windows"
+	Hostname="LAPTOP-D884VKLO"
+	OSRelease="10.0.26200"
+	OSVersion="Windows 10"
+	OSPlatform="AMD64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="15"
+	ModelID="4"
+	ModelName="AMD Ryzen AI 9 HX 370 w/ Radeon 890M"
+	ProcessorCacheSize="80"
+	NumberOfLogicalCPU="24"
+	NumberOfPhysicalCPU="12"
+	TotalVirtualMemory="68729"
+	TotalPhysicalMemory="64633"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2000"
+	>
+	<Testing>
+		<StartDateTime>Dec 30 23:44 V[NON-UTF-8-BYTE-0xE4]steuropa, normaltid</StartDateTime>
+		<StartTestTime>1767134653</StartTestTime>
+		<TestList>
+			<Test>./ApiTests</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>ApiTests</Name>
+			<Path>.</Path>
+			<FullName>./ApiTests</FullName>
+			<FullCommandLine>C:\Users\Enrique\Documents\VScode\CI\Uppg3-APItester_cpp\build\test_api.exe</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>1.69501</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>C:\Users\Enrique\Documents\VScode\CI\Uppg3-APItester_cpp\build\test_api.exe</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJyNUcFOhDAQvfcr5ugeaKAsuiHxQKJujIkS0BPhUJdZbYSWtFP392UhbDarJrzTpPNe38y86vaEGgqvtdIfEAGhI9hb082184qQsyo4oYZta95lO/VRfytrdId64CIFvr8gn//5IL+wJGMx69Xr8MoqKN6eYUT9q8u3SLk1jd+RK5C81U6EIatEKJIgEkEcgojT9TqNEi5urmuolN6bGkqSlo7rZPnjaM45/1uVJJuTaibDznR9i4QNHBR9giNJ3qUwWk+jwsvT4nHhSmxi6Nxq+VVmCZAh2a7YsuMTShs05qBZdR7tf5GClZpfOg375VlZ3t8d45jYnP0AGvCoPA==</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Dec 30 23:44 V[NON-UTF-8-BYTE-0xE4]steuropa, normaltid</EndDateTime>
+		<EndTestTime>1767134655</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

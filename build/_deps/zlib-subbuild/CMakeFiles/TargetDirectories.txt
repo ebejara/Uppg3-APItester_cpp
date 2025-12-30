@@ -1,0 +1,3 @@
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/zlib-subbuild/CMakeFiles/zlib-populate.dir
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/zlib-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/zlib-subbuild/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+ lib/libgtest.a lib/libgtest_main.a "_deps/spdlog-build/libspdlogd.a" "_deps/cpr-build/cpr/libcpr.a" lib/libgtest.a "_deps/curl-build/lib/libcurl-d.a" -lws2_32 -lbcrypt -ladvapi32 -lcrypt32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

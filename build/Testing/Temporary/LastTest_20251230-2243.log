@@ -1,0 +1,30 @@
+Start testing: Dec 30 23:44 Västeuropa, normaltid
+----------------------------------------------------------
+1/1 Testing: ApiTests
+1/1 Test: ApiTests
+Command: "C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/test_api.exe"
+Directory: C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build
+"ApiTests" start time: Dec 30 23:44 Västeuropa, normaltid
+Output:
+----------------------------------------------------------
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from FakeStoreApiTest
+[ RUN      ] FakeStoreApiTest.GetProductsReturns200
+[2025-12-30 23:44:15.276] [info] Starting API test...
+[2025-12-30 23:44:15.558] [info] API test completed with status: 200
+[       OK ] FakeStoreApiTest.GetProductsReturns200 (283 ms)
+[----------] 1 test from FakeStoreApiTest (283 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (283 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   1.70 sec
+----------------------------------------------------------
+Test Passed.
+"ApiTests" end time: Dec 30 23:44 Västeuropa, normaltid
+"ApiTests" time elapsed: 00:00:01
+----------------------------------------------------------
+
+End testing: Dec 30 23:44 Västeuropa, normaltid

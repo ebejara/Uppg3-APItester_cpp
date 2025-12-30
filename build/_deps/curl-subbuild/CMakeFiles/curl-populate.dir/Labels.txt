@@ -1,0 +1,14 @@
+# Target labels
+ curl-populate
+# Source files and their labels
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/CMakeFiles/curl-populate
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/CMakeFiles/curl-populate.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/CMakeFiles/curl-populate-complete.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-build.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-configure.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-download.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-install.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-mkdir.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-patch.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-test.rule
+C:/Users/Enrique/Documents/VScode/CI/Uppg3-APItester_cpp/build/_deps/curl-subbuild/curl-populate-prefix/src/curl-populate-stamp/curl-populate-update.rule
