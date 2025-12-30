@@ -8,17 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest   # Ändra till Windows!
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4   # Uppdatera till senaste versionen
+        uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
-
-      - name: Set up CMake
-        uses: lukka/get-cmake@v3.27.7
+        run: choco install cmake ninja  # Installerar CMake och Ninja på Windows
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
