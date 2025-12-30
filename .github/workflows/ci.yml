@@ -8,14 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest   # Ändra till Windows!
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: choco install cmake ninja  # Installerar CMake och Ninja på Windows
+        run: choco install cmake ninja --confirm
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -25,4 +25,4 @@ jobs:
 
       - name: Run tests
         working-directory: build
-        run: ctest -V
+        run: ctest -C Release -V  # Lägg till -C Release här!
