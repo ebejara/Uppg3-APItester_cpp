@@ -7,12 +7,9 @@ TEST(FakeStoreApiTest, GetProductsReturns200) {
 
     cpr::Response r = cpr::Get(cpr::Url{"https://fakestoreapi.com/products"});
 
-    // Kontrollera statuskod
-    EXPECT_EQ(r.status_code, 200);
-
-
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
         // In CI, expect 403 due to IP blocking
+        spdlog::info("CI environment detected, expecting 403 status code. Actual: {}", r.status_code);
         EXPECT_EQ(r.status_code, 403);
     } else {
         // Locally, expect 200
