@@ -3,6 +3,8 @@ project(ApiTester)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Valfritt: Lägg executables i output-mappen
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)
 
 include(FetchContent)
 
@@ -50,7 +52,7 @@ FetchContent_MakeAvailable(cpr)
 
 # ======================== Test executable ===========================
 add_executable(test_api tests/test_integration.cpp)
-
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)
 target_include_directories(test_api PRIVATE include)
 target_link_libraries(test_api PRIVATE gtest gtest_main spdlog::spdlog cpr::cpr)
 
