@@ -25,7 +25,7 @@ jobs:
 
       # Run main application from output folder (assuming custom copy in CMakeLists.txt)
       - name: Run main application (APItester)
-        working-directory: output
+        working-directory: output\Release
         run: .\APItester.exe
         continue-on-error: true  # Allow CI to continue even if APItester fails (change to false if you want to stop)
 
