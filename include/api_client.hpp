@@ -1,7 +1,6 @@
 #pragma once
 #include <cpr/cpr.h>
-
-//Gör en wrapper så att cpr kan Mockas.
+#include <string>
 
 class ApiClient {
 public:

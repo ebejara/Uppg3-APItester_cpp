@@ -3,3 +3,4 @@ build/
 output/
 *.exe
 *.o
+src/products.json
