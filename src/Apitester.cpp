@@ -9,10 +9,19 @@ using json = nlohmann::json;
 
 int main() {
     spdlog::info("Starting API fetch from fakestoreapi.com...");
+    std::filesystem::path exe_path = std::filesystem::current_path();
+    std::filesystem::path project_root;
+    if (std::getenv("GITHUB_ACTIONS") != nullptr) {
+        project_root = exe_path.parent_path().parent_path();  // Goes up from output/Release
+    } else {
+        project_root = exe_path.parent_path();  // Goes up from output
+    }
 
+    std::string src_dir = project_root.string() + "/src/";
     const std::string api_url = "https://fakestoreapi.com/products";
-    const std::string fallback_file = "../src/products_prefetched.json";
-    const std::string product_file = "../src/products.json";
+    std::string product_file = src_dir + "products.json";
+    std::string fallback_file = src_dir + "products_prefetched.json";
+
 
     json products;
 
