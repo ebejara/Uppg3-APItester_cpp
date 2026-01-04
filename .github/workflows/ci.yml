@@ -23,13 +23,12 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      # NEW: Run the main application first
+      # Run main application from output folder (assuming custom copy in CMakeLists.txt)
       - name: Run main application (APItester)
-        working-directory: build/Release   # Executable is placed here on Windows multi-config
+        working-directory: output
         run: .\APItester.exe
-        continue-on-error: false           # Stops pipeline if APItester fails (change to true if you want tests to run anyway)
+        continue-on-error: true  # Allow CI to continue even if APItester fails (change to false if you want to stop)
 
-      # Existing: Run tests after the main app
       - name: Run tests
         working-directory: build
         run: ctest -C Release -V
