@@ -29,11 +29,9 @@ int main() {
     ApiClient client;
     cpr::Response r = client.get(api_url);
 
-    if (r.status_code == 200) {
+    if (r.status_code == 20) {
         spdlog::info("API call successful (status 200). Using fresh data.");
-        // Spara rå JSON
         
-
         // Spara formaterad version
         try {
             products = json::parse(r.text);
@@ -61,7 +59,7 @@ int main() {
         try {
             backupfile >> products; 
             spdlog::info("Successfully loaded fallback JSON from {}", fallback_file);
-            products = json::parse(r.text); // se till att filen innehåller giltig JSON formatering
+           // products = json::parse(r.text); // se till att filen innehåller giltig JSON formatering
             std::ofstream file  (product_file);
             if (!file.is_open()) {
                 spdlog::error("Failed to open {} for writing. Does the 'src' folder exist in current directory?", product_file);
