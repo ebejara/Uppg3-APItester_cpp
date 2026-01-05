@@ -18,12 +18,13 @@ inline std::string project_root_path() {
 
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
         // I GitHub Actions ligger exe:n i output/Release
-        std::cout << "Detected GitHub Actions environment." << std::endl;
+        std::cout << "api_clint.hpp: project_root_path():Detected GitHub Actions environment." << std::endl;
         project_root = exe_path.parent_path().parent_path();
     } else {
         // Lokalt ligger exe:n i output
         project_root = exe_path.parent_path();
     }
+    std::cout << "api_clint.hpp: project_root_path(): Project root path: " << project_root.string() << std::endl;
     return project_root.string();
 }
 
@@ -36,13 +37,16 @@ public:
     }
     // Den gemensamma funktionen som både program och tester använder
     virtual json call_api(const std::string& url = API_URL) {
+        std::cout << "api_clint.hpp: call_api(): Just before calling Get()" << std::endl;
         cpr::Response r = cpr::Get(cpr::Url{url});
-
+        std::cout << "api_clint.hpp: call_api(): Called Get()" << std::endl;
         if (r.status_code == 200) {
             try {
+                std::cout << "api_clint.hpp: call_api(): trying return parsed file" << std::endl;
                 return json::parse(r.text);
                 //return nullptr; // Temporary return to avoid parse error in CI
             } catch (const json::parse_error& e) {
+                std::cout << "api_clint.hpp: call_api(): File could not be parsed. Catching Throw" << std::endl;
                 throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
             }
         } else {

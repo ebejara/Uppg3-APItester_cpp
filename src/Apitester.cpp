@@ -32,7 +32,7 @@ int main() {
     spdlog::info("Starting API fetch from fakestoreapi.com...");   
     /*This function: call_api(),
      is tested in test section with actual call and simulated responces*/
-     spdlog::info("Attempting call to actual API. ");
+     spdlog::info("APItester.cpp: Attempting call to actual API.");
      products = client.call_api(); // Make GET request to API
      if (products.is_null()) {
         spdlog::warn("API call returned null data. Falling back to predefined file.");
