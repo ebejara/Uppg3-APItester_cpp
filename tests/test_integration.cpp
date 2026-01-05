@@ -13,18 +13,18 @@ public:
     MOCK_METHOD(cpr::Response, get, (const std::string& url), (override));
 };
 
-// Riktigt test mot externa API:et (med 403-hantering i CI)
-TEST(FakeStoreApiTest, GetProductsReturns200_Or_403_InCI) {
+/*Actual call to API with handling for 403 Nehagtive responce*/
+TEST(FakeStoreApiTest, GetProductsReturns200_Or_403_In_CI) {
     spdlog::info("Starting real API test...");
 
     ApiClient client;  // Använder wrapper → riktig cpr::Get
-    cpr::Response r = client.get("https://fakestoreapi.com/products");
+    cpr::Response r = client.get(api_url);
     //I CI-miljö kommer anrop till API:t att nekas.
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
-        spdlog::info("CI environment detected – expecting 200 or 403. Actual: {}", r.status_code); //Anger svaret från API:t
-        EXPECT_TRUE(r.status_code == 200 || r.status_code == 403); //Alltid positiv svar
+        spdlog::info("CI environment detected – expecting 200 or 403. Actual: {}", r.status_code);
+        EXPECT_TRUE(r.status_code == 200 || r.status_code == 403); //Positive if Code is 200 or 403
     } else {
-        EXPECT_EQ(r.status_code, 200); // Detta förväntas om testet körs lokalt
+        EXPECT_EQ(r.status_code, 200); //Expectde if call done from local computer.
         EXPECT_GT(r.text.length(), 0);
         EXPECT_EQ(r.header["content-type"], "application/json; charset=utf-8");
     }
@@ -32,7 +32,7 @@ TEST(FakeStoreApiTest, GetProductsReturns200_Or_403_InCI) {
     spdlog::info("Real API test completed with status: {}", r.status_code);
 }
 
-// Mock-test: Simulerar alltid 200
+/* Mock-test: Always simulates positve reponce: 200*/
 TEST(FakeStoreApiTest, Handles200_OK_WithMock) {
     spdlog::info("Starting mocked API test (forcing 200)...");
 
@@ -46,19 +46,25 @@ TEST(FakeStoreApiTest, Handles200_OK_WithMock) {
     EXPECT_CALL(mock_client, get(_))
         .WillOnce(Return(mock_response));
 
-    cpr::Response r = mock_client.get("https://fakestoreapi.com/products");
+    cpr::Response r = mock_client.get(api_url);
 
     EXPECT_EQ(r.status_code, 200);
     EXPECT_GT(r.text.length(), 0);
     EXPECT_EQ(r.header["content-type"], "application/json; charset=utf-8");
 
     spdlog::info("Mocked API test completed with status: {}", r.status_code);
+    if (r.status_code == 200) {
+        spdlog::info("Tests will run on actual API database data");
+    } 
+    else {
+        spdlog::info("Tests will use predefined (pre-fetched) JSON data due to API access issues.");
+    }  
 }
 
 
 
 
-// Mock-test: Simulerar alltid 403
+/*Mock-test: Always sinulates responce:  403*/
 TEST(FakeStoreApiTest, Handles403ForbiddenWithMock) {
     spdlog::info("Starting mocked API test (forcing 403)...");
 
@@ -72,7 +78,7 @@ TEST(FakeStoreApiTest, Handles403ForbiddenWithMock) {
     EXPECT_CALL(mock_client, get(_))
         .WillOnce(Return(mock_response));
 
-    cpr::Response r = mock_client.get("https://fakestoreapi.com/products");
+    cpr::Response r = mock_client.get(api_url);
 
     EXPECT_EQ(r.status_code, 403);
     EXPECT_GT(r.text.length(), 0);
