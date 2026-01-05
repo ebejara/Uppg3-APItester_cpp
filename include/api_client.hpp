@@ -18,6 +18,7 @@ inline std::string project_root_path() {
 
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
         // I GitHub Actions ligger exe:n i output/Release
+        std::cout << "Detected GitHub Actions environment." << std::endl;
         project_root = exe_path.parent_path().parent_path();
     } else {
         // Lokalt ligger exe:n i output
