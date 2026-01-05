@@ -39,16 +39,16 @@ int main() {
         std::ifstream backupfile(fallback_file);
         if (!backupfile.is_open()) {
             spdlog::error("Failed to open {} for writing. Check path.", fallback_file);
-            return 1;
+            return 11;
         }
-        backupfile >> products; //Load backup file (instaed of API answer) to JSON object
+        backupfile >> products; //Load backup file (instead of API answer) to JSON object
         spdlog::info("Successfully loaded fallback JSON from {}", fallback_file);
     }
     
     std::ofstream file(product_file); //Open/create file to save products
     if (!file.is_open()) {
         spdlog::error("Failed to create/open {} for writing. Check path.", product_file);
-        return 1;
+        return 12;
     }
     file << products;//Save parsed JSON data to product file
     file.close();

@@ -40,6 +40,7 @@ public:
         if (r.status_code == 200) {
             try {
                 return json::parse(r.text);
+                //return nullptr; // Temporary return to avoid parse error in CI
             } catch (const json::parse_error& e) {
                 throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
             }
