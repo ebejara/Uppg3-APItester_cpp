@@ -50,7 +50,6 @@ FetchContent_MakeAvailable(json)
 
 # ======================== Huvudprogram ========================
 add_executable(APItester src/APItester.cpp)
-
 target_include_directories(APItester PRIVATE include)
 target_link_libraries(APItester PRIVATE spdlog::spdlog cpr::cpr nlohmann_json::nlohmann_json)
 
@@ -58,7 +57,15 @@ target_link_libraries(APItester PRIVATE spdlog::spdlog cpr::cpr nlohmann_json::n
 add_executable(test_api tests/test_integration.cpp)
 
 target_include_directories(test_api PRIVATE include)
-target_link_libraries(test_api PRIVATE gtest gtest_main gmock gmock_main spdlog::spdlog cpr::cpr)
+target_link_libraries(test_api PRIVATE 
+    gtest 
+    gtest_main 
+    gmock 
+    gmock_main 
+    spdlog::spdlog 
+    cpr::cpr
+    nlohmann_json::nlohmann_json   
+)
 
 enable_testing()
 gtest_discover_tests(test_api)

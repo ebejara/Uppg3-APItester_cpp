@@ -1,56 +1,50 @@
 #pragma once
+
 #include <cpr/cpr.h>
+#include <nlohmann/json.hpp>
 #include <string>
-#include <iostream>
+#include <stdexcept>
+#include <filesystem>
 
-/*Definitions*/
-//Classes
-class ApiClient; // Forward declaration
+using json = nlohmann::json;
 
-//Functions
-std::string project_root_path(); // Forward declaration
-cpr::Response call_api(); // Forward declaration
+// Konstant för API-URL
+const std::string API_URL = "https://fakestoreapi.com/products";
 
-//Variables and constants
-const std::string api_url = "https://fakestoreapi.com/products"; // API endpoint
+// Hjälpfunktion för att hitta projektroten (används i APItester.cpp)
+inline std::string project_root_path() {
+    std::filesystem::path exe_path = std::filesystem::current_path();
+    std::filesystem::path project_root;
 
-/*================================ Body of code ================================*/
-/* Wrapper class for CPR to allow mocking in tests */
+    if (std::getenv("GITHUB_ACTIONS") != nullptr) {
+        // I GitHub Actions ligger exe:n i output/Release
+        project_root = exe_path.parent_path().parent_path();
+    } else {
+        // Lokalt ligger exe:n i output
+        project_root = exe_path.parent_path();
+    }
+    return project_root.string();
+}
+
+// Wrapper-klass för att kunna mocka API-anrop
 class ApiClient {
 public:
     virtual ~ApiClient() = default;
-    virtual cpr::Response get(const std::string& url) {
+    virtual cpr::Response get(const std::string& url = API_URL){
         return cpr::Get(cpr::Url{url});
     }
-};
+    // Den gemensamma funktionen som både program och tester använder
+    virtual json call_api(const std::string& url = API_URL) {
+        cpr::Response r = cpr::Get(cpr::Url{url});
 
-
-    
-
- /*Defining  project root path relative to the .exe folder.
- Path may differ between local host and GitHub Actions runner*/
-   std::string project_root_path (){
-        std::filesystem::path exe_path = std::filesystem::current_path(); // Path to the executable
-        std::filesystem::path project_root;
-        if (std::getenv("GITHUB_ACTIONS") != nullptr) { // In CI environment
-            project_root = exe_path.parent_path().parent_path();  // Goes up two steps from output/Release
-        } else {// in local environment
-            project_root = exe_path.parent_path();  // Goes up one step from output
+        if (r.status_code == 200) {
+            try {
+                return json::parse(r.text);
+            } catch (const json::parse_error& e) {
+                throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
+            }
+        } else {
+            throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
         }
-        return project_root.string();
-
-   }
-
-   /*Function to call API and return response.
-     Shall be unit tested and Integration tested */
-    cpr::Response call_api(){
-        ApiClient client;
-        cpr::Response r = client.get(api_url);
-        if ( r.status_code != 200){
-            std::cout << "call_api(): API call failed with status: " << r.status_code << std::endl;
-        }
-        else{
-            std::cout << "call_api(): API call successful. Code: " << r.status_code << std::endl;   
-        }
-        return r; 
     }
+};
