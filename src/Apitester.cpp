@@ -50,7 +50,7 @@ int main() {
         spdlog::error("Failed to create/open {} for writing. Check path.", product_file);
         return 12;
     }
-    file << products;//Save parsed JSON data to product file
+    file << products.dump(4); //Save parsed JSON data to product file
     file.close();
     spdlog::info("Successfully saved products to file {}.", product_file);
 

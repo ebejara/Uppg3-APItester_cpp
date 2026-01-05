@@ -37,19 +37,20 @@ public:
     }
     // Den gemensamma funktionen som både program och tester använder
     virtual json call_api(const std::string& url = API_URL) {
-        std::cout << "api_clint.hpp: call_api(): Just before calling Get()" << std::endl;
+        std::cout << "api_client.hpp: call_api(): Just before calling Get()" << std::endl;
         cpr::Response r = cpr::Get(cpr::Url{url});
-        std::cout << "api_clint.hpp: call_api(): Called Get()" << std::endl;
+        std::cout << "api_client.hpp: call_api(): Called Get()" << std::endl;
         if (r.status_code == 200) {
             try {
-                std::cout << "api_clint.hpp: call_api(): trying return parsed file" << std::endl;
+                std::cout << "api_client.hpp: call_api(): Trying return parsed file" << std::endl;
                 return json::parse(r.text);
                 //return nullptr; // Temporary return to avoid parse error in CI
             } catch (const json::parse_error& e) {
-                std::cout << "api_clint.hpp: call_api(): File could not be parsed. Catching Throw" << std::endl;
+                std::cout << "api_client.hpp: call_api(): File could not be parsed. Catching Throw" << std::endl;
                 throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
             }
         } else {
+            std::cout << "api_client.hpp: call_api(): Trying to throw error" << std::endl;
             throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
         }
     }
