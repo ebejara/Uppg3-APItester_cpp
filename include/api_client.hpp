@@ -38,9 +38,9 @@ public:
     }
     // Den gemensamma funktionen som både program och tester använder
     virtual json call_api(const std::string& url = API_URL) {
-        std::cout << "api_client.hpp: call_api(): Just before calling Get()" << std::endl;
+        
         cpr::Response r = cpr::Get(cpr::Url{url});
-        std::cout << "api_client.hpp: call_api(): Called Get()" << std::endl;
+        
         if (r.status_code == 200) {
             try {
                 std::cout << "api_client.hpp: call_api(): Trying return parsed file" << std::endl;
