@@ -5,6 +5,7 @@
 #include <string>
 #include <stdexcept>
 #include <filesystem>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -40,7 +41,7 @@ public:
         std::cout << "api_client.hpp: call_api(): Just before calling Get()" << std::endl;
         cpr::Response r = cpr::Get(cpr::Url{url});
         std::cout << "api_client.hpp: call_api(): Called Get()" << std::endl;
-        if (r.status_code == 201) {
+        if (r.status_code == 200) {
             try {
                 std::cout << "api_client.hpp: call_api(): Trying return parsed file" << std::endl;
                 return json::parse(r.text);
