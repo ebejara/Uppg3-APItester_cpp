@@ -1,0 +1,45 @@
+name: CI (Ubuntu)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Ubuntu-latest har redan cmake, ninja, git, gcc/g++ och curl förinstallerat
+      # Vi behöver bara uppdatera paketlistan och installera eventuella extra dev-paket
+      - name: Install dependencies (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libcurl4-openssl-dev
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -G Ninja
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      # Kör main-programmet (APItester)
+      # Notera: På Linux hamnar executables oftast direkt i build/, inte i någon output/Release
+      - name: Run main application (APItester)
+        working-directory: build
+        run: ./APItester
+        continue-on-error: true   # Fortsätt även om APItester misslyckas (t.ex. pga API-blockering)
+
+      - name: Run tests
+        working-directory: build
+        run: ctest -C Release -V
+
+      # Extra steg – visa testresultat tydligare (valfritt men rekommenderat)
+      - name: Show test output (if failed)
+        if: failure()
+        working-directory: build
+        run: cat Testing/Temporary/LastTest.log || true
