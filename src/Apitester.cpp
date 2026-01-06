@@ -33,7 +33,7 @@ int main() {
     /*This function: call_api(),
      is tested in test section with actual call and simulated responces*/
      spdlog::info("APItester.cpp: Attempting call to actual API.");
-     products = client.call_api(); // Make GET request to API
+     products = client.call_api(API_URL); // Make GET request to API
      if (products.is_null()) {
         spdlog::warn("API call returned null data. Falling back to predefined file.");
         std::ifstream backupfile(fallback_file);
