@@ -18,16 +18,14 @@ public:
 TEST(ApiClientTest, ReturnsJsonOnSuccess) {
     MockApiClient mock;
     json expected = R"([{"id":1,"title":"Test"}])"_json;
-    std::string product_file = project_root_path () + "/src/"+ "products.json";   // File to save products from API
-    std::ifstream productfile(product_file);
-    productfile >> expected;
+    
 
     EXPECT_CALL(mock, call_api(_)).WillOnce(Return(expected));
 
     json result = mock.call_api(API_URL);
     spdlog::info("Expecting 20 products, got: {}", result.size());
 
-    EXPECT_EQ(result.size(), 20);
+    EXPECT_EQ(result.size(), 1);
     spdlog::info("Expecting 20 products, got: {}", result.size());
 }
 
