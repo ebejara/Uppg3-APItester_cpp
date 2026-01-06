@@ -3,7 +3,7 @@
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
 #include "Apitester.hpp"  // Din wrapper
-
+#include "HTTPClient.hpp"
 using ::testing::Return;
 using ::testing::_;
 

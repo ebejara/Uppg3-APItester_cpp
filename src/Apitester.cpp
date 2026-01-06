@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 #include "Apitester.hpp"
 #include <nlohmann/json.hpp>
-
+#include "HTTPClient.hpp"
 /* This fiel will try to fetch data from https://fakestoreapi.com/products
    Usually thsi works on a local computer but it seems that the API is blocking calls from
    CI environments like Github Actions. For that purpose the main functions purpose si to create a
@@ -33,6 +33,7 @@ int main() {
     /*This function: call_api(),
      is tested in test section with actual call and simulated responces*/
      spdlog::info("APItester.cpp: Attempting call to actual API.");
+    
      products = client.call_api(API_URL); // Make GET request to API
      if (products.is_null()) {
         spdlog::warn("API call returned null data. Falling back to predefined file.");

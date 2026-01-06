@@ -6,7 +6,8 @@
 #include <stdexcept>
 #include <filesystem>
 #include <iostream>
-
+#include <curl/curl.h>
+#include <utility>
 using json = nlohmann::json;
 
 // Konstant för API-URL
@@ -37,6 +38,7 @@ public:
         return cpr::Get(cpr::Url{url});
     }
     // Den gemensamma funktionen som både program och tester använder
+    
     virtual json call_api(const std::string& url = API_URL) {
         
         cpr::Response r = cpr::Get(cpr::Url{url});
