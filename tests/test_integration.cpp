@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
-#include "api_client.hpp"  // Din wrapper
+#include "Apitester.hpp"  // Din wrapper
 
 using ::testing::Return;
 using ::testing::_;
@@ -23,10 +23,10 @@ TEST(ApiClientTest, ReturnsJsonOnSuccess) {
     EXPECT_CALL(mock, call_api(_)).WillOnce(Return(expected));
 
     json result = mock.call_api(API_URL);
-    spdlog::info("Expecting 20 products, got: {}", result.size());
+    spdlog::info("Expecting 1 products, got: {}", result.size());
 
     EXPECT_EQ(result.size(), 1);
-    spdlog::info("Expecting 20 products, got: {}", result.size());
+    
 }
 
 
