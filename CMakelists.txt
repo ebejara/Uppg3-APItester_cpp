@@ -51,19 +51,8 @@ FetchContent_MakeAvailable(json)
 # ======================== Huvudprogram ========================
 add_executable(APItester src/APItester.cpp)
 target_include_directories(APItester PRIVATE include)
-target_link_libraries(APItester PRIVATE spdlog::spdlog cpr::cpr nlohmann_json::nlohmann_json curl.h)
+target_link_libraries(APItester PRIVATE spdlog::spdlog cpr::cpr nlohmann_json::nlohmann_json)
 
-
-#========================= Mock API Client for testing ========================
-add_executable(HTTPClient src/HTTPClient.cpp)
-target_include_directories(HTTPClient PRIVATE include)
-target_link_libraries(HTTPClient PRIVATE gtest 
-    gtest_main 
-    gmock 
-    gmock_main 
-    spdlog::spdlog 
-    cpr::cpr
-    nlohmann_json::nlohmann_json   )
 
 # ======================== Test executable ========================
 add_executable(test_api tests/test_integration.cpp)
@@ -77,7 +66,6 @@ target_link_libraries(test_api PRIVATE
     spdlog::spdlog 
     cpr::cpr
     nlohmann_json::nlohmann_json
-    curl.h 
 )
 
 

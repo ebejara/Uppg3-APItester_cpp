@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 #include "Apitester.hpp"
 #include <nlohmann/json.hpp>
-#include "HTTPClient.hpp"
+
 /* This fiel will try to fetch data from https://fakestoreapi.com/products
    Usually thsi works on a local computer but it seems that the API is blocking calls from
    CI environments like Github Actions. For that purpose the main functions purpose si to create a
@@ -17,6 +17,8 @@ bool products_file_loaded = false;
 
 
 int main() {
+
+    CurlGlobalGuard curl_guard;  // Initieras automatiskt här, cleanup vid exit
     /*Defining Path to /src. relative to folder where .exe built. 
     Path may differ between running on local client computer  vs. 
     running on Github Actions runner. This is so exeutable file can find the
@@ -25,7 +27,7 @@ int main() {
     std::string src_dir = project_root_path () + "/src/"; // Path to src folder
     std::string product_file = src_dir + "products.json";   // File to save products from API
     std::string fallback_file = src_dir + "products_prefetched.json"; //File to use if API fails
-
+   
     json products; //define JSON object to hold products
     ApiClient client;
     // 
@@ -34,7 +36,10 @@ int main() {
      is tested in test section with actual call and simulated responces*/
      spdlog::info("APItester.cpp: Attempting call to actual API.");
     
-     products = client.call_api(API_URL); // Make GET request to API
+     //products = client.call_api(API_URL); // Make GET request to API
+     
+     auto [status, body] = client.http_get_with_headers();  // Default URL
+     products = json::parse(body);
      if (products.is_null()) {
         spdlog::warn("API call returned null data. Falling back to predefined file.");
         std::ifstream backupfile(fallback_file);
@@ -61,6 +66,6 @@ int main() {
     for (const auto& p : products) {
         std::cout << "- " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
     }*/
-
+ 
     return 0;
 }
