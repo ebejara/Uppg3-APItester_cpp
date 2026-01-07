@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
-#include "Apitester.hpp"  // Wrapper class for API calls
+#include "APItester.hpp" // Wrapper class for API calls
 
 using ::testing::Return;
 using ::testing::_;

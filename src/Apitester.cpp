@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <spdlog/spdlog.h>
-#include "Apitester.hpp"
+#include "APItester.hpp"
 #include <nlohmann/json.hpp>
 
 /* This fiel will try to fetch data from https://fakestoreapi.com/products
