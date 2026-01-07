@@ -17,16 +17,6 @@ bool products_file_loaded = false;
 
 
 int main() {
-
-  // Initieras automatiskt här, cleanup vid exit
-    /*Defining Path to /src. relative to folder where .exe built. 
-    Path may differ between running on local client computer  vs. 
-    running on Github Actions runner. This is so exeutable file can find the
-    JSON files in the src directory which mirror teh APIc content */
-  
-    std::string src_dir = project_root_path () + "/src/"; // Path to src folder
-    std::string product_file = src_dir + "products.json";   // File to save products from API
-    std::string fallback_file = src_dir + "products_prefetched.json"; //File to use if API fails
    
     json products; //define JSON object to hold products
     ApiClient client;
@@ -53,9 +43,6 @@ int main() {
              spdlog::info("APItest response was negative probably due to running from GitHub Actions.", r.status_code);}
             throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
         }
-    
-    
-   
 
     return 0;
 }
