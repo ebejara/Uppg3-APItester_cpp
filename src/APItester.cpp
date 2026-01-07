@@ -36,10 +36,11 @@ int main() {
      is tested in test section with actual call and simulated responces*/
      spdlog::info("APItester.cpp: Attempting call to actual API.");
     
-     products = client.call_api(API_URL); // Make GET request to API
+     //products = client.call_api(API_URL); // Make GET request to API
      
-     //auto [status, body] = client.http_get_with_headers();  // Default URL
-     //products = json::parse(body);
+     auto [status, body] = client.http_get_with_headers();  // Default URL
+     spdlog::info("APItester.cpp: HTTP GET completed with status code: {}", status);
+     products = json::parse(body);
      if (products.is_null()) {
         spdlog::warn("API call returned null data. Falling back to predefined file.");
         std::ifstream backupfile(fallback_file);
