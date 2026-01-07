@@ -20,13 +20,11 @@ int main() {
    
     json products; //define JSON object to hold products
     ApiClient client;
-    // 
-    spdlog::info("Starting API fetch from fakestoreapi.com...");   
-    spdlog::info("APItester.cpp: Attempting call to actual API.");
+    //  
+    spdlog::info("APItester.cpp: Attempting call to actual API. If succesful, products will be listed below.");
     
-     //products = client.call_api(API_URL); // Make GET request to API
      cpr::Response r = client.get(API_URL);
-    if (r.status_code == 200) {
+    if (r.status_code == 20) {
         spdlog::info("APItest response was succesful. Status code {}.", r.status_code);
         try {
             products = json::parse(r.text);
@@ -36,6 +34,7 @@ int main() {
             }
 
         } catch (const json::parse_error& e) {
+            spdlog::error("Failed to parse JSON response.");
             throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
         }
         } else {
