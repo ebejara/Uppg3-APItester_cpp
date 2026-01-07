@@ -96,7 +96,7 @@ TEST(FakeStoreApiIntegration, ProductByIdReturnsCorrectData) {
     //Fetch all products from API
     cpr::Response r = client.get(API_URL);
     json products = json::parse(r.text);
-
+    spdlog::info("HTTP response code from API is: {}", r.status_code);
     // Hitta produkt med id = 5
     json product5;
     bool found = false;
