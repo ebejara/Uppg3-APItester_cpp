@@ -66,7 +66,7 @@ int main() {
     for (const auto& p : products) {
         std::cout << "- " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
     }*/
- 
-    
+
+
     return 0;
 }
