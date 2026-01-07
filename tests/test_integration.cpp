@@ -11,34 +11,33 @@ using ::testing::_;
 class MockApiClient : public ApiClient {
 public:
     MOCK_METHOD(json, call_api, (const std::string& url), (override));
-    MOCK_METHOD(cpr::Response, get, (const std::string& url), (override));
+    MOCK_METHOD(cpr::Response, get, (const std::string&), (override));
 };
 
-// Test för lyckat anrop
-TEST(ApiClientTest, ReturnsJsonOnSuccess) {
+
+/*******************************************************************
+*   Unit test: Test that call_api() will throw an error if responce*
+*   is not 200.                                                    *
+*   Mocks the response to call_api() to be 403 so that call_api()  *
+*   will throw an error.                                           *
+*******************************************************************/
+TEST(ApiClientTest, ThrowsOnHttpErrorStatus) {
     MockApiClient mock;
-    json expected = R"([{"id":1,"title":"Test"}])"_json;
-    
 
-    EXPECT_CALL(mock, call_api(_)).WillOnce(Return(expected));
+    // Skapa en fake response med status 403
+    cpr::Response fake_response;
+    fake_response.status_code = 403;
+    fake_response.text = "Forbidden";  // valfritt, används inte vid throw
 
-    json result = mock.call_api(API_URL);
-    spdlog::info("Expecting 1 products, got: {}", result.size());
+    // Mocka get()-metoden att returnera fake_response
+    EXPECT_CALL(mock, get(_)).WillOnce(Return(fake_response));
 
-    EXPECT_EQ(result.size(), 1);
-    
+    // Testa att call_api kastar rätt undantag
+    EXPECT_THROW(
+        mock.call_api(API_URL),
+        std::runtime_error
+    );
 }
-
-
-// Test för fel
-TEST(ApiClientTest, ThrowsOnError) {
-    MockApiClient mock;
-    EXPECT_CALL(mock, call_api(_))
-        .WillOnce(testing::Throw(std::runtime_error("API call failed with status: 403")));
-
-    EXPECT_THROW(mock.call_api(API_URL), std::runtime_error);
-}
-
 
 
 /*Actual call to API with handling for 403 Nehagtive responce*/
@@ -58,7 +57,7 @@ TEST(FakeStoreApiTest, GetProductsReturns200_Or_403_In_CI) {
     }
 
     spdlog::info("Real API test completed with status: {}", r.status_code);
-}
+};  
 
 /* Mock-test: Always simulates positve reponce: 200*/
 TEST(FakeStoreApiTest, Handles200_OK_WithMock) {

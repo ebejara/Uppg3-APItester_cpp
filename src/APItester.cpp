@@ -8,8 +8,8 @@
 /* This fiel will try to fetch data from https://fakestoreapi.com/products
    Usually thsi works on a local computer but it seems that the API is blocking calls from
    CI environments like Github Actions. For that purpose the main functions purpose si to create a
-   JSON file with the data from the API. In case the calls to the API fail, then teh file will be fetched from
-   an ofline copy that was previously fetcehd from the API on a local environment computer */
+   JSON file with the data from the API. In case the calls to the API fail, then the file will be fetched from
+   an offline copy that was previously fetcehd from the API on a local environment computer */
 
 using json = nlohmann::json;
 
@@ -18,7 +18,7 @@ bool products_file_loaded = false;
 
 int main() {
 
-    CurlGlobalGuard curl_guard;  // Initieras automatiskt här, cleanup vid exit
+  // Initieras automatiskt här, cleanup vid exit
     /*Defining Path to /src. relative to folder where .exe built. 
     Path may differ between running on local client computer  vs. 
     running on Github Actions runner. This is so exeutable file can find the
@@ -32,42 +32,29 @@ int main() {
     ApiClient client;
     // 
     spdlog::info("Starting API fetch from fakestoreapi.com...");   
-    /*This function: call_api(),
-     is tested in test section with actual call and simulated responces*/
-     spdlog::info("APItester.cpp: Attempting call to actual API.");
+    spdlog::info("APItester.cpp: Attempting call to actual API.");
     
      //products = client.call_api(API_URL); // Make GET request to API
-     
-     auto [status, body] = client.http_get_with_headers();  // Default URL
-     spdlog::info("APItester.cpp: HTTP GET completed with status code: {}", status);
-     products = json::parse(body);
-     if (products.is_null()) {
-        spdlog::warn("API call returned null data. Falling back to predefined file.");
-        std::ifstream backupfile(fallback_file);
-        if (!backupfile.is_open()) {
-            spdlog::error("Failed to open {} for writing. Check path.", fallback_file);
-            return 1;
+     cpr::Response r = client.get(API_URL);
+    if (r.status_code == 200) {
+        spdlog::info("APItest response was succesful. Status code {}.", r.status_code);
+        try {
+            products = json::parse(r.text);
+            std::cout << "Antal produkter: " << products.size() << std::endl;
+            for (const auto& p : products) {
+                std::cout << "- " << p["id"] << " " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
+            }
+
+        } catch (const json::parse_error& e) {
+            throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
         }
-        backupfile >> products; //Load backup file (instead of API answer) to JSON object
-        spdlog::info("Successfully loaded fallback JSON from {}", fallback_file);
-    }
+        } else {
+            if (std::getenv("GITHUB_ACTIONS") != nullptr) {
+             spdlog::info("APItest response was negative probably due to running from GitHub Actions.", r.status_code);}
+            throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
+        }
     
-    std::ofstream file(product_file); //Open/create file to save products
-    if (!file.is_open()) {
-        spdlog::error("Failed to create/open {} for writing. Check path.", product_file);
-        return 1;
-    }
-    file << products.dump(4); //Save parsed JSON data to product file
-    file.close();
-    spdlog::info("Successfully saved products to file {}.", product_file);
-
-        
-    // Print product titles and prices to console
-    /*std::cout << "Antal produkter: " << products.size() << std::endl;
-    for (const auto& p : products) {
-        std::cout << "- " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
-    }*/
-
+    
    
 
     return 0;
