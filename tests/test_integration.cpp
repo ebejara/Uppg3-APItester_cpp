@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
-#include "Apitester.hpp"
+#include "APItester.hpp"
 
 class MockApiClient : public ApiClient {
 public:
@@ -21,7 +21,6 @@ TEST(ApiClientTest, GetReturns200OnSuccess) {
     EXPECT_FALSE(result.text.empty());
     //EXPECT_THAT(result.text, ::testing::HasSubstr("Test Product"));  // ← Rätt!
 }
-
 
 TEST(ApiClientTest, GetReturns403OnFailure) {
     MockApiClient mock;

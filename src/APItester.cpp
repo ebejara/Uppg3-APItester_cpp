@@ -32,7 +32,7 @@ int main() {
             products = json::parse(r.text);
             std::cout << "Antal produkter: " << products.size() << std::endl;
             for (const auto& p : products) {
-                std::cout << "- " << p["id"] << " " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
+                std::cout << "- " <<"Id " << p["id"] << " " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
             }
 
         } catch (const json::parse_error& e) {
