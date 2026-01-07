@@ -12,20 +12,6 @@ using json = nlohmann::json;
 
 const std::string API_URL = "https://fakestoreapi.com/products";
 
-/*inline std::string project_root_path() {
-    std::filesystem::path exe_path = std::filesystem::current_path();
-    std::filesystem::path project_root;
-
-    if (std::getenv("GITHUB_ACTIONS") != nullptr) {
-        std::cout << "Apitester.hpp: project_root_path(): Detected GitHub Actions environment." << std::endl;
-        project_root = exe_path.parent_path().parent_path();
-    } else {
-        project_root = exe_path.parent_path();
-    }
-    std::cout << "Apitester.hpp: project_root_path(): Project root path: " << project_root.string() << std::endl;
-    return project_root.string();
-}*/
-
 class ApiClient {
 public:
     virtual ~ApiClient() = default;
