@@ -14,68 +14,132 @@ public:
 
 
 /******************************************************************
-*Unit test: Test that client.get(_) returns a JSON body and a     *
-*status code 200 on success. Mocks the positive response and the  *
-*JSON from the APIResponse                                        *
-/******************************************************************/
+ * Unit test: Verifies that client.get() returns HTTP 200 and 
+ * a valid JSON body when the API call succeeds successfully.
+ * 
+ * This test:
+ *   - Mocks a successful API response (status 200)
+ *   - Uses a realistic JSON array payload
+ *   - Verifies status code, non-empty body, and content presence
+ ******************************************************************/
 TEST(ApiClientUnitTest, GetReturns200OnSuccess) {
+    // Arrange
     MockApiClient mock;
-
+    // Prepare fake successful response that the mock should return
     cpr::Response fake_success;
     fake_success.status_code = 200;
-    fake_success.text = R"( [{"id":1,"title":"Test Product"}] )";
-
+    fake_success.text = R"( [{"id":1,"title":"Test Product"}] )";// Raw string literal for clean JSON
+    
+    // Set expectation: when get() is called with ANY argument,
+    // return our prepared successful response exactly once
     EXPECT_CALL(mock, get(::testing::_)).WillOnce(::testing::Return(fake_success));
-
+    
+    // Act
     cpr::Response result = mock.get(API_URL);
-
+    
+    //Assert
     EXPECT_EQ(result.status_code, 200);
     EXPECT_FALSE(result.text.empty());
     EXPECT_THAT(result.text, ::testing::HasSubstr("Test Product"));
 }
 
-/*******************************************************************
-*Unit test: Test that client.get(_) returns an empty JSON body and *
-* a status code 403 on on failed request. Mocks the nagative       *
-*response and the empty JSON body from the APIResponse             *
-/******************************************************************/
+/******************************************************************
+ * Unit test: Verifies that client.get() returns HTTP 403 and 
+ * a an empty JSON body when the API call fails.
+ * 
+ * This test:
+ *   - Mocks a failed API response (status 403)
+ *   - Uses an empty JSON body
+ *   - Verifies status code and empty body
+ ******************************************************************/
+TEST(ApiClientUnitTest, GetReturns200OnSuccess) {
 TEST(ApiClientUnitTest, GetReturns403WithEmptyBodyOnFailure) {
+    
+    //Arrange
     MockApiClient mock;
 
+    // Skapar en simulerad felrespons (403 Forbidden)
     cpr::Response fake_failure;
     fake_failure.status_code = 403;
-    fake_failure.text = "";  // Tom sträng – ingen body
+    fake_failure.text = "";  // Empty body – according to test requirement
 
     EXPECT_CALL(mock, get(::testing::_)).WillOnce(::testing::Return(fake_failure));
 
+    // Act
     cpr::Response result = mock.get(API_URL);
 
-    EXPECT_EQ(result.status_code, 403) << "Statuskod ska vara 403 vid fel";
-    EXPECT_TRUE(result.text.empty()) << "Response body ska vara tom vid fel";
+    // Assert
+    EXPECT_EQ(result.status_code, 403) << "Status code shall be 403";
+    EXPECT_TRUE(result.text.empty()) << "Response body shall be empty at fault";
     
 }
 
 /*****************************************************************
-*Integration test: Checks that the JSON file contains exactly 20 *
-*products in JSON body returned from the API.                    *
-/*****************************************************************/
+ * Integration Test
+ * 
+ * Test Name:    ReturnsExactly20Products
+ * Description:  Verifies that the Fake Store API endpoint 
+ *               returns exactly 20 products in the JSON array response
+ * 
+ * Note:         FakeStoreAPI always returns exactly 
+ *               20 dummy products 
+ *****************************************************************/
 TEST(FakeStoreApiIntegrationTest, ReturnsExactly20Products) {
+    // Send GET request to the products endpoint
     cpr::Response  r = client.get(API_URL);
+
+
+    // Here we assume success
+    // Parse the raw JSON response body into a nlohmann::json object
     json products = json::parse(r.text);
+    
+    // Basic logging for debugging / CI visibility - Status code is 200 when successful
     spdlog::info("HTTP response code from API is: {}", r.status_code);
+    
+    // Log the actual number of products we received (very useful when test fails)
     spdlog::info("Number of products returned from API is: {}", products.size());
-    EXPECT_EQ(products.size(), 20) << "API";
+    
+    // Assertion: verify we received exactly the expected number of items
+    EXPECT_EQ(products.size(), 20) << "FakeStoreAPI should always return exactly 20 products\n"
+        << "(this is a well-known characteristic of this public test API)";
 }
 
 /*****************************************************************
-*Integration test: Checks that the JSON file contains an item    *
-*with correct fields (title, price, category).                   *
-/*****************************************************************/
+ * Integration Test
+ *
+ * Test Name:    FirstProductHasCorrectFields
+ * Description:  Verifies that the **first product** returned by the
+ *               Fake Store API has the expected structure and contains
+ *               the correct values for the most important fields.
+ *
+ * Purpose:      - Confirms the API returns data in the expected format
+ *               - Catches breaking schema changes early
+ *               - Verifies that the dummy data hasn't changed unexpectedly
+ *
+ * Note:         The first product is hardcoded in FakeStoreAPI and has
+ *               been stable since the API's creation (~2021).
+ *****************************************************************/
 TEST(FakeStoreApiIntegrationTest, FirstProductHasCorrectFields) {
+    
+    // Fetch all products from the API (real call)
     cpr::Response  r = client.get(API_URL);
+
+    // Assert that the call was successful
+    ASSERT_EQ(r.status_code, 200) << "API request failed";
+
+    // Parse the JSON response
     json products = json::parse(r.text);
+    
+    // Quick visibility in logs (especially useful in CI)
     spdlog::info("HTTP response code from API is: {}", r.status_code);
+    
+    // Make sure we actually have at least one product
+    ASSERT_FALSE(products.empty()) << "API returned empty product list";
+
+    //Check that the first product has the expected id
     EXPECT_EQ(products[0]["id"].get<int>(), 1);
+
+    // Verify key fields of the first product
     EXPECT_EQ(products[0]["title"].get<std::string>(),
               "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops");
     EXPECT_EQ(products[0]["category"].get<std::string>(), "men's clothing");
@@ -88,6 +152,7 @@ TEST(FakeStoreApiIntegrationTest, FirstProductHasCorrectFields) {
     EXPECT_TRUE(products[0].contains("image"));
     EXPECT_TRUE(products[0].contains("rating"));
 }
+
 /*****************************************************************
 *Integration test: Checks that the JSON file contains an item    *
 *with correct fields and values .                                *
