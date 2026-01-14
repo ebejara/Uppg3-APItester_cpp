@@ -52,7 +52,6 @@ TEST(ApiClientUnitTest, GetReturns200OnSuccess) {
  *   - Uses an empty JSON body
  *   - Verifies status code and empty body
  ******************************************************************/
-TEST(ApiClientUnitTest, GetReturns200OnSuccess) {
 TEST(ApiClientUnitTest, GetReturns403WithEmptyBodyOnFailure) {
     
     //Arrange
