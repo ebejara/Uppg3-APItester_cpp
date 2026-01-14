@@ -1,5 +1,8 @@
 # Uppg3 - API Tester (C++)
 
+Detta är inlämningsuppgift 3 i kursen Kontinuerlig Integration (CI).
+Projektet använder Selenium WebDriver i Java med JUnit 5 och Maven för att automatisera tester mot webbplatsen saucedemo.com.
+
 En C++-applikation som testar FakeStoreAPI[](https://fakestoreapi.com) med integrationstester och GitHub Actions CI.
 
 ## Översikt
@@ -12,15 +15,14 @@ Projektet implementerar:
 
 ## Kravuppfyllelse
 
-### G-krav
+### Grundkrav för G
 - Integrationstest som anropar `GET /products` och verifierar statuskod 200
 - GitHub Actions-pipeline som kör testerna vid varje push
 
-### VG-krav
+### Utökade tester för VG
 - Validering av antal produkter (exakt 20)
 - Validering av specifika fält (title, price, category) på en produkt
 - Validering av data för specifikt produkt-ID (t.ex. id 5)
-- Togs bort:  Robust felhantering vid nätverksproblem (fallback till lokal JSON)
 
 ## Bygg och kör lokalt
 - Lokala anrop till returnerar positive respons (HTTP 200).
@@ -34,11 +36,10 @@ Projektet implementerar:
 - Git
 
 ### Utvecklingsmiljö
-- VSCode
-- Bibliotek, se CMakeLists.txt
+- VSCode (lokalt)
+- Bibliotek: se CMakeLists.txt
 
 ### Steg
-```bash
 git clone https://github.com/ebejara/Uppg3-APItester_cpp.git
 cd Uppg3-APItester_cpp
 cmake -B build -DCMAKE_BUILD_TYPE=Release
