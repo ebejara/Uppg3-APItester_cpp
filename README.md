@@ -1,6 +1,6 @@
 # Uppg3 - API Tester (C++)
 
-Detta är inlämningsuppgift 3 i kursen Continuous Integration (CI).
+Detta är inlämningsuppgift 3 i kursen Testautomatisering med Continuous Integration (CI).
 Projektet använder Selenium WebDriver i Java med JUnit 5 och Maven för att automatisera tester mot webbplatsen saucedemo.com.
 
 En C++-applikation som testar FakeStoreAPI[](https://fakestoreapi.com) med integrationstester och GitHub Actions CI.
