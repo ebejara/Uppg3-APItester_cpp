@@ -10,6 +10,7 @@
 
 using json = nlohmann::json;
 
+// Constant string used for API URL
 const std::string API_URL = "https://fakestoreapi.com/products";
 
 class ApiClient {
@@ -17,11 +18,12 @@ public:
     virtual ~ApiClient() = default;
 
     // CPR-based method to perform GET request - fails with 403 in GitHub Actions
+    //Wrapps cpr::Get to allow mocking in tests, but not used anymore in main application or test
     virtual cpr::Response get(const std::string& url = API_URL) {
         return cpr::Get(cpr::Url{url});
     }
-
-    virtual json call_api(const std::string& url = API_URL) {
+    // Method to call the API and parse JSON response. If call fails or parsing fails, throws an exception.
+ /*   virtual json call_api(const std::string& url = API_URL) {
         cpr::Response r = get(url);
         if (r.status_code == 200) {
             try {
@@ -32,7 +34,7 @@ public:
         } else {
             throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
         }
-    }
+    }*/
 
     
 };

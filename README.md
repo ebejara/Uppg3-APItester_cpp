@@ -1,9 +1,8 @@
 # Uppg3 - API Tester (C++)
-
-Detta är inlämningsuppgift 3 i kursen Testautomatisering med Continuous Integration (CI).
-Projektet använder Selenium WebDriver i Java med JUnit 5 och Maven för att automatisera tester mot webbplatsen saucedemo.com.
-
+Inlämn ingsuppgift 3 . kursen Testautomatisering med Continuous Integration (CI)
 En C++-applikation som testar FakeStoreAPI[](https://fakestoreapi.com) med integrationstester och GitHub Actions CI.
+Applicationen anropar API:t och skriver ut producterna i terminalfönstret vid lyckad anrop, annars kastas en "exeption"
+Testerna innehåller  mockade anrop och även riktiga anrop (som ju är kravet på uppgiften)
 
 ## Översikt
 
@@ -15,28 +14,23 @@ Projektet implementerar:
 
 ## Kravuppfyllelse
 
-### Grundkrav för G
+### Grundläggande krav
 - Integrationstest som anropar `GET /products` och verifierar statuskod 200
 - GitHub Actions-pipeline som kör testerna vid varje push
 
-### Utökade tester för VG
+### Utökade krav
 - Validering av antal produkter (exakt 20)
 - Validering av specifika fält (title, price, category) på en produkt
 - Validering av data för specifikt produkt-ID (t.ex. id 5)
-
 ## Bygg och kör lokalt
-- Lokala anrop till returnerar positive respons (HTTP 200).
-- Anrop från Hithub Actions returnerar negativ respons (HTTP 403)
-- Rekommenderar att köra lokalt.
-
-
+- När man kör lokalt så lyckas anropen till API:t. Misslyckas när man kör från github actions.
 ### Förutsättningar
 - CMake ≥ 3.14
 - C++17-kompilator (g++, clang++, MSVC)
 - Git
 
 ### Utvecklingsmiljö
-- VSCode (lokalt)
+- VSCode (lokalt med MinGW g++ kompilator)
 - Bibliotek: se CMakeLists.txt
 
 ### Steg
@@ -46,3 +40,4 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ./build/APItester        # Linux/macOS
 build\Release\APItester.exe  # Windows
+(eller kör Cmake konfiguration in VSCode, första gången måste man välja kompilator)

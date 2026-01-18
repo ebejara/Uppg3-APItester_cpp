@@ -8,7 +8,8 @@
 /***************************************************************************************************** * 
 *This file will try to fetch data from https://fakestoreapi.com/products                               *
 * Usually this works on a local computer but it seems that the API is blocking calls from              *
-* CI environments like Github Actions in which case the main() application will exit throwing an error *
+* CI environments like Github Actions in which case the main() application will exit throwing an error.
+* Tests can be run independent from main function.
 ********************************************************************************************************/
 
 using json = nlohmann::json;
@@ -21,22 +22,23 @@ int main() {
     //  
     spdlog::info("APItester.cpp: Attempting call to actual API. If succesful, products will be listed in console.");
     
-     cpr::Response r = client.get(API_URL);
-    if (r.status_code == 200) {
+    //Call to API
+    cpr::Response r = client.get(API_URL);
+    if (r.status_code == 200) { //succesful call to API
         spdlog::info("APItest response was succesful. Status code {}.", r.status_code);
-        try {
+        try { //Try toparse JSON from API response
             products = json::parse(r.text);
             std::cout << "Number of products: " << products.size() << std::endl;
             for (const auto& p : products) {
                 std::cout << "- " <<"Id " << p["id"] << " " << p["title"] << " (" << p["price"] << " USD)" << std::endl;
             }
 
-        } catch (const json::parse_error& e) {
+        } catch (const json::parse_error& e) { //parsing failed
             spdlog::error("Failed to parse JSON response.");
             throw std::runtime_error("Failed to parse JSON response: " + std::string(e.what()));
         }
-        } else {
-            if (std::getenv("GITHUB_ACTIONS") != nullptr) {
+        } else { //unsuccesful call to API.
+            if (std::getenv("GITHUB_ACTIONS") != nullptr) { //If Github Actions environment is detected, log info
              spdlog::info("APItest response was negative probably due to running from GitHub Actions.", r.status_code);}
             throw std::runtime_error("API call failed with status: " + std::to_string(r.status_code));
         }
