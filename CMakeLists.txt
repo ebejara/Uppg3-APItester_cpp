@@ -1,0 +1,73 @@
+cmake_minimum_required(VERSION 3.14)
+project(ApiTester)
+ 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ALLA executables hamnar i output-mappen
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)
+
+include(FetchContent)
+
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
+# GoogleTest
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.14.0
+)
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
+
+# spdlog
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG v1.14.1
+)
+FetchContent_MakeAvailable(spdlog)
+
+# cpr
+FetchContent_Declare(
+    cpr
+    GIT_REPOSITORY https://github.com/libcpr/cpr.git
+    GIT_TAG 1.14.1
+)
+set(CPR_CURL_USE_LIBPSL OFF CACHE BOOL "" FORCE)
+set(CPR_USE_SYSTEM_LIB_PSL OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(cpr)
+
+
+# nlohmann/json - for JSON-parsing
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3  # Stabil version
+)
+FetchContent_MakeAvailable(json)
+
+# ======================== Huvudprogram ========================
+add_executable(APItester src/APItester.cpp)
+target_include_directories(APItester PRIVATE include)
+target_link_libraries(APItester PRIVATE spdlog::spdlog cpr::cpr nlohmann_json::nlohmann_json)
+
+
+# ======================== Test executable ========================
+add_executable(test_api tests/test_integration.cpp)
+
+target_include_directories(test_api PRIVATE include)
+target_link_libraries(test_api PRIVATE 
+    gtest 
+    gtest_main 
+    gmock 
+    gmock_main 
+    spdlog::spdlog 
+    cpr::cpr
+    nlohmann_json::nlohmann_json
+)
+
+
+enable_testing()
+gtest_discover_tests(test_api)

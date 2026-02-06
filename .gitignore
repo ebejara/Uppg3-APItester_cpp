@@ -1,0 +1,7 @@
+.vscode/
+build/
+output/
+*.exe
+*.o
+src/products.json
+Uppg3-APItester_cpp/
