@@ -19,16 +19,16 @@ jobs:
           msystem: UCRT64         # Modern variant (rekommenderas 2026)
           update: true
           install: >-             # ← Multi-line sträng för att undvika problem
-            git                   # För repo-hantering
+            git
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-cmake
-            mingw-w64-ucrt-x86_64-ninja  # Valfritt, snabbare builds
-            mingw-w64-ucrt-x86_64-make   # Valfritt, för make-kompatibilitet
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-make 
 
       - name: Configure CMake with MinGW
         run: |
           cmake -B build \
-            -G "MinGW Makefiles" \          # ← Använd MinGW generator (inte Ninja om du inte vill)
+            -G "MinGW Makefiles" \          
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=gcc \
             -DCMAKE_CXX_COMPILER=g++
