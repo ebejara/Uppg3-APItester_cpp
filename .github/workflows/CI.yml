@@ -1,0 +1,48 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build & Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        # Du kan lägga till fler builds senare, t.ex. macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@v3.27.7  # Eller nyare version om du vill
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev  # För CPR (cpr libcurl dependency)
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # CPR behöver vcpkg eller liknande, men vi använder FetchContent i CMake
+          # Om du har problem med dependencies på Windows → överväg vcpkg
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Run tests
+        working-directory: build
+        run: ctest --output-on-failure --build-config Release
+        # Alternativt om du kör executable direkt: ./APItester (Linux) eller .\Release\APItester.exe (Windows)
