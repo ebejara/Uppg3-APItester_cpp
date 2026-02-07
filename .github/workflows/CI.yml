@@ -26,13 +26,7 @@ jobs:
             mingw-w64-ucrt-x86_64-make 
 
       - name: Configure CMake with MinGW
-        run: |
-          cmake -B build \
-            -G "MinGW Makefiles" \          
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_COMPILER=gcc \
-            -DCMAKE_CXX_COMPILER=g++
-
+        run: cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
       - name: Build
         run: cmake --build build --parallel $(nproc)  # Eller använd --parallel 4 om nproc inte funkar
 
