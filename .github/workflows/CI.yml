@@ -8,7 +8,7 @@ jobs:
 
     defaults:
       run:
-        shell: msys2 {0}          # ← Detta använder MSYS2 bash
+        shell: msys2 {0}  # Använd MSYS2 bash för alla run-steg
 
     steps:
       - uses: actions/checkout@v4
@@ -16,25 +16,25 @@ jobs:
       - name: Setup MSYS2 + MinGW
         uses: msys2/setup-msys2@v2
         with:
-          msystem: UCRT64         # ← Modern variant (rekommenderas 2026), bra C++-support
+          msystem: UCRT64         # Modern variant (rekommenderas 2026)
           update: true
-          install: >-
-            git
+          install: >-             # ← Multi-line sträng för att undvika problem
+            git                   # För repo-hantering
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-cmake
-            mingw-w64-ucrt-x86_64-ninja     # valfritt, snabbare builds
-            mingw-w64-ucrt-x86_64-make
+            mingw-w64-ucrt-x86_64-ninja  # Valfritt, snabbare builds
+            mingw-w64-ucrt-x86_64-make   # Valfritt, för make-kompatibilitet
 
       - name: Configure CMake with MinGW
         run: |
           cmake -B build \
-            -G "MinGW Makefiles" \          # ← Viktigt! Använd MinGW generator
+            -G "MinGW Makefiles" \          # ← Använd MinGW generator (inte Ninja om du inte vill)
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=gcc \
             -DCMAKE_CXX_COMPILER=g++
 
       - name: Build
-        run: cmake --build build --parallel $(nproc)
+        run: cmake --build build --parallel $(nproc)  # Eller använd --parallel 4 om nproc inte funkar
 
       - name: Run tests
         run: |
