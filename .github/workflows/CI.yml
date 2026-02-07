@@ -1,48 +1,42 @@
-name: CI - Build and Test
+name: CI with MinGW
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
-  build-and-test:
-    name: Build & Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  build-mingw:
+    runs-on: windows-latest
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        # Du kan lägga till fler builds senare, t.ex. macos-latest
+    defaults:
+      run:
+        shell: msys2 {0}          # ← Detta använder MSYS2 bash
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup CMake
-        uses: lukka/get-cmake@v3.27.7  # Eller nyare version om du vill
+      - name: Setup MSYS2 + MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64         # ← Modern variant (rekommenderas 2026), bra C++-support
+          update: true
+          install: >-
+            git
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja     # valfritt, snabbare builds
+            mingw-w64-ucrt-x86_64-make
 
-      - name: Install dependencies (Ubuntu)
-        if: runner.os == 'Linux'
+      - name: Configure CMake with MinGW
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev  # För CPR (cpr libcurl dependency)
-
-      - name: Install dependencies (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          # CPR behöver vcpkg eller liknande, men vi använder FetchContent i CMake
-          # Om du har problem med dependencies på Windows → överväg vcpkg
-
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake -B build \
+            -G "MinGW Makefiles" \          # ← Viktigt! Använd MinGW generator
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc \
+            -DCMAKE_CXX_COMPILER=g++
 
       - name: Build
-        run: cmake --build build --config Release --parallel 4
+        run: cmake --build build --parallel $(nproc)
 
       - name: Run tests
-        working-directory: build
-        run: ctest --output-on-failure --build-config Release
-        # Alternativt om du kör executable direkt: ./APItester (Linux) eller .\Release\APItester.exe (Windows)
+        run: |
+          cd build
+          ctest --output-on-failure
